@@ -30,10 +30,10 @@ class Node:
 	def g(self):
 		return length
 
-	def __repr__(self):
+	def __repr__(self): #make node printable 
 		return ''.join(self.numbers)
 
-def isCorrectFraction(node):
+def isCorrectFraction(node): #method for checking if the current node is a solution
 	number = ''.join(node.numbers)
 	numerator = float(number[0:4])
 	denominator = float(number[4:9])
@@ -45,7 +45,7 @@ def isCorrectFraction(node):
 		return False
 
 
-def findPath(startnode, isSolution):
+def findPath(startnode, isSolution): #search the tree. Kind of useless, since the path is always the current node + startnode.
 	print 'er i findPath'
 	visitedNodes = []
 	toVisit = []
@@ -71,7 +71,7 @@ def findPath(startnode, isSolution):
 
 		currentNode = heapq.heappop(toVisit)
 
-def generateTree():
+def generateTree(): #generating a tree of all the permutations
 	print 'er i generateTree-'
 	startnode = Node(None)
 	for permutation in itertools.permutations(startnode.numbers):
