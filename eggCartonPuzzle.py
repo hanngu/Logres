@@ -2,8 +2,8 @@ from math import exp
 import random
 from copy import deepcopy
 
-max_eggs = 10
-max_k = 2
+max_eggs = 30
+max_k = 3
 dT = 0.005
 
 class Carton:
@@ -93,28 +93,28 @@ class Carton:
 			y2 = i
 			ant2 = 0
 
-			for j in range(self.height-x):
+			for j in range(self.height-i):
 				ant1 += self.cells[x1][y1]
 				x1 += 1
 				y1 += 1
-
+				#print y1
 				ant2 += self.cells[x2][y2]
 				x2 += 1
 				y2 += 1
+
 
 				if (ant1 > max_k or ant2 > max_k):
 					return False
 
 		#Checking if it's valid diagonally			
-		for i in range(self.height, 0):
+		for i in range(self.height, 0, -1): # last argument is step, we need to set step manually to -1
 			x1 = i# rows
 			y1 = self.width
 			ant1 = 0
 			x2 = self.height # columns
 			y2 = i
 			ant2 = 0
-
-			for j in range(self.height-x, 0):
+			for j in range(self.height-i, 0):
 				ant1 += self.cells[x1][y1]
 				x1 -= 1
 				y1 -= 1
@@ -123,16 +123,10 @@ class Carton:
 				x2 -= 1
 				y2 -= 1
 
-				if (ant1 > 2 or ant2 > 2):
+				if (ant1 > max_k or ant2 > max_k):
 					return False
 
 		return True
-
-
-
-
-carton = Carton(5, 5)
-
 
 def simulated_annealing(start):
 
@@ -143,6 +137,7 @@ def simulated_annealing(start):
 		return carton
 
 	while(carton.score() < max_eggs):
+		print carton
 		neighbors = carton.generate_neighbor()
 
 		max_neigh = 0
@@ -170,7 +165,9 @@ def simulated_annealing(start):
 
 	return carton
 
-print simulated_annealing(carton)
+start = Carton(10, 10) #setting the sizes
+carton = simulated_annealing(start)
+print "Solution:\n", carton
 
 
 
