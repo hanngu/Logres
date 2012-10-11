@@ -1,5 +1,6 @@
 from math import exp
 import random
+from copy import deepcopy
 
 max_eggs = 10
 max_k = 2
@@ -37,19 +38,21 @@ class Carton:
 		return ant
 
 	def generate_neighbor(self):
-		
+
 		neighbors = []
 
 		for i in range(1, self.width*self.height):
 			neighbor = Carton(self.width, self.height)
-			for j in range(i):
-				x = j % self.width
-				y = j / self.width
+			neighbor.cells = deepcopy(self.cells)
 
-				if(self.cells[x][y] == 0):
+			while True:
+				x = random.randint(0, self.width - 1)
+				y = random.randint(0, self.height - 1)
+
+				if(neighbor.cells[x][y] == 0):
 					neighbor.cells[x][y] = 1
-				else:
-					neighbor.cells[x][y] = 0
+					break
+					
 
 			if(neighbor.is_valid()):
 
@@ -130,8 +133,6 @@ class Carton:
 
 carton = Carton(5, 5)
 
-carton.generate_neighbor()
-
 
 def simulated_annealing(start):
 
@@ -147,7 +148,6 @@ def simulated_annealing(start):
 		max_neigh = 0
 		best_neighbor = neighbors[0]
 		for i in neighbors:
-			print i
 			current_score = i.score()
 			if(current_score> max_neigh):
 				max_neigh = current_score
@@ -168,12 +168,9 @@ def simulated_annealing(start):
 
 		temp -= dT
 
-		if(temp < 0):
-			temp = 0.0000001
-
 	return carton
 
-#print simulated_annealing(carton)
+print simulated_annealing(carton)
 
 
 
